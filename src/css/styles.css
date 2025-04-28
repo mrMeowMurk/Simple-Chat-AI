@@ -1,0 +1,271 @@
+:root {
+    --primary: #1a1d24;
+    --secondary: #2a2f3d;
+    --accent: #4a9cff;
+    --text: #e3e7ed;
+    --code-bg: #2d3440;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: var(--primary);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-box {
+    flex-grow: 1;
+    background: var(--secondary);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    max-width: 80%;
+    padding: 15px;
+    border-radius: 12px;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+}
+
+.user-message {
+    background: var(--accent);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-message {
+    background: var(--secondary);
+    border: 1px solid #3a4252;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.code-block {
+    position: relative;
+    margin: 15px 0;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.timestamp {
+    font-size: 0.75em;
+    color: #7f8fa4;
+    margin-top: 5px;
+}
+
+.thought-process {
+    background: rgba(42, 47, 61, 0.9);
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 15px;
+    border-left: 3px solid var(--accent);
+    position: relative;
+    animation: thoughtFade 0.4s ease;
+    font-size: 0.9em;
+}
+
+.thought-process::before {
+    content: '💡 Мыслительный процесс';
+    display: block;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-size: 0.85em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes thoughtFade {
+    0% { opacity: 0; transform: translateX(-10px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    position: sticky;
+    bottom: 0;
+    background: var(--primary);
+    padding: 15px 0;
+}
+
+#user-input {
+    resize: none;
+    overflow-y: auto;
+    flex-grow: 1;
+    min-height: 25px;
+    max-height: 80px;
+    line-height: 1.5;
+    padding: 12px 18px;
+    font-size: 16px;
+    color: var(--text);
+    border: none;
+    border-radius: 25px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+    background-color: var(--secondary);
+}
+
+#user-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(74, 156, 255, 0.15);
+}
+
+#user-input::placeholder {
+    color: #6b7280;
+    opacity: 0.8;
+}
+
+#user-input::-webkit-scrollbar {
+    width: 6px;
+}
+
+#user-input::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+#user-input::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+#user-input::-webkit-scrollbar-thumb:hover {
+    background: #3d8aff;
+}
+
+@keyframes input-glow {
+    0% { box-shadow: 0 0 0 0 rgba(74, 156, 255, 0); }
+    100% { box-shadow: 0 0 0 4px rgba(74, 156, 255, 0.1); }
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+button:hover {
+    background: #3d8aff;
+    transform: translateY(-1px);
+}
+
+.feature-block {
+    margin: 15px 0;
+    border-left: 3px solid #4a9cff;
+    padding-left: 15px;
+}
+
+.feature-title {
+    color: #4a9cff;
+    font-weight: 600;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-list {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.feature-list li {
+    margin: 8px 0;
+    position: relative;
+}
+
+.feature-list li::before {
+    content: '•';
+    color: #4a9cff;
+    position: absolute;
+    left: -15px;
+}
+
+.implementation-example {
+    background: rgba(76, 86, 106, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.example-header {
+    font-size: 0.9em;
+    color: #81a1c1;
+    margin-bottom: 8px;
+}
+
+.model-selector {
+    background: var(--secondary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237f8fa4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+    color: var(--text);
+    padding: 12px 40px 12px 16px;
+    border: none;
+    border-radius: 25px;
+    appearance: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.model-selector:hover {
+    background-color: #323846;
+}
+
+.model-selector:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent);
+}
+
+.model-selector option {
+    background: var(--secondary);
+    color: var(--text);
+    padding: 10px;
+}
