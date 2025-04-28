@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Code Assistant</title>
+
+    <!-- Prism.js стили -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #1a1d24;
@@ -67,14 +70,33 @@
         }
 
         .code-block {
-            background: var(--code-bg);
-            padding: 12px;
+            position: relative;
+            margin: 15px 0;
             border-radius: 8px;
-            margin: 10px 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9em;
-            white-space: pre-wrap;
-            tab-size: 2;
+            overflow-x: auto;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        pre[class*="language-"] {
+            margin: 0;
+            padding: 1.5em !important;
+            background: none !important;
         }
 
         .input-container {
@@ -190,6 +212,13 @@
         </div>
     </div>
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
     <script>
         const API_KEY = 'io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6IjBmYjkxMjcwLTUyYzQtNDE2MC04MGQ0LWE1MzhiMDg3ZTRlMiIsImV4cCI6NDg5OTQyOTg2N30.YWAktTw6JftNrLbV32jiBWdUvlASrJdcY6SPnSqPqPHcNjT3wF93ETY_uMiTq1UvR2JQgquJFlrfdOlR2fkaeQ'; // Замените на ваш ключ
         const API_URL = 'https://api.intelligence.io.solutions/api/v1/chat/completions';
@@ -251,16 +280,25 @@
                 }
             );
 
-            // Форматирование блоков кода
-            formatted = formatted.replace(/```([\s\S]*?)```/g, 
-                '<div class="code-block">$1</div>');
+            // Форматирование блоков кода с определением языка
+            formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, 
+                (match, lang, code) => {
+                    const language = lang || 'none';
+                    return `
+                    <div class="code-block">
+                        <button class="copy-button">Копировать</button>
+                        <pre><code class="language-${language}">${code.trim()}</code></pre>
+                    </div>
+                    `;
+                }
+            );
 
             // Добавление временной метки
             const timestamp = new Date().toLocaleTimeString('ru-RU', { 
                 hour: '2-digit', 
                 minute: '2-digit' 
             });
-            
+
             return `${formatted}<div class="timestamp">${timestamp}</div>`;
         }
 
@@ -269,18 +307,28 @@
             const msgDiv = document.createElement('div');
             msgDiv.className = `message ${sender}-message`;
             msgDiv.innerHTML = content;
+            
+            // Добавляем обработчик копирования кода
+            msgDiv.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const code = button.nextElementSibling.textContent;
+                    navigator.clipboard.writeText(code).then(() => {
+                        button.textContent = 'Скопировано!';
+                        setTimeout(() => {
+                            button.textContent = 'Копировать';
+                        }, 2000);
+                    });
+                });
+            });
+
             chatBox.appendChild(msgDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Вызываем подсветку синтаксиса
+            Prism.highlightAllUnder(msgDiv);
+            
             return msgDiv;
         }
-
-        // Обработка нажатия Enter
-        document.getElementById('user-input').addEventListener('keypress', e => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
     </script>
 </body>
 </html>
