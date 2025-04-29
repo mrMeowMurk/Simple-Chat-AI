@@ -257,3 +257,28 @@ function insertExample(text) {
 // Проверяем видимость примеров при загрузке и после каждого сообщения
 window.addEventListener('load', checkExamplesVisibility);
 document.getElementById('chat-box').addEventListener('DOMNodeInserted', checkExamplesVisibility);
+
+const MAX_CHARS = 1000;
+const charCounter = document.getElementById('char-counter');
+const userInput = document.getElementById('user-input');
+
+function updateCharCounter() {
+    const length = userInput.value.length;
+    charCounter.textContent = `${length}/${MAX_CHARS}`;
+    
+    // Изменяем цвет в зависимости от количества символов
+    if (length > MAX_CHARS) {
+        charCounter.classList.add('error');
+        charCounter.classList.remove('warning');
+    } else if (length > MAX_CHARS * 0.8) {
+        charCounter.classList.add('warning');
+        charCounter.classList.remove('error');
+    } else {
+        charCounter.classList.remove('warning', 'error');
+    }
+}
+
+userInput.addEventListener('input', updateCharCounter);
+
+// Инициализация при загрузке
+updateCharCounter();

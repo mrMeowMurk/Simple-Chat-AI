@@ -418,3 +418,34 @@ h1 {
     background: rgba(74, 156, 255, 0.2);
     transform: translateY(-1px);
 }
+
+#notification {
+    display: none;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #000;
+}
+
+.char-counter {
+    position: absolute;
+    right: 120px;
+    bottom: 30px;
+    font-size: 0.8em;
+    color: #7f8fa4;
+    background: rgba(42, 47, 61, 0.5);
+    padding: 4px 8px;
+    border-radius: 12px;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.char-counter.warning {
+    color: #ff9800;
+}
+
+.char-counter.error {
+    color: #ff4d4d;
+}
