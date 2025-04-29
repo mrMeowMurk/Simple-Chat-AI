@@ -115,13 +115,13 @@ function formatResponse(markdownText) {
         container.className = 'code-block';
         const btn = document.createElement('button');
         btn.className = 'copy-button';
-        btn.textContent = 'Копировать';
-        btn.addEventListener('click', () => {
-            navigator.clipboard.writeText(code).then(() => {
-                btn.textContent = 'Скопировано!';
-                setTimeout(() => btn.textContent = 'Копировать', 2000);
-            });
-        });
+        // Используем SVG иконку
+        btn.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+        `;
         container.appendChild(btn);
         container.appendChild(block.parentNode.cloneNode(true));
         block.parentNode.replaceWith(container);
@@ -143,8 +143,21 @@ function addMessage(sender, content) {
         button.addEventListener('click', () => {
             const code = button.nextElementSibling.textContent;
             navigator.clipboard.writeText(code).then(() => {
-                button.textContent = 'Скопировано!';
-                setTimeout(() => button.textContent = 'Копировать', 2000);
+                // Меняем иконку на галочку при успешном копировании
+                button.innerHTML = `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                `;
+                setTimeout(() => {
+                    // Возвращаем исходную иконку через 2 секунды
+                    button.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    `;
+                }, 2000);
             });
         });
     });
