@@ -9,9 +9,13 @@
 
 ## 🖼️ Пример интерфейса
 
-<div style="margin: 20px 0; text-align: center;">
-  ![Пример интерфейса чата](./assets/chat-preview.png)
-</div>
+<table style="margin: 20px 0; width: 100%;">
+  <tr>
+    <td style="padding: 20px 0;">
+      <img src="./assets/chat-preview.png" alt="Пример интерфейса чата" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    </td>
+  </tr>
+</table>
 *Скриншот интерфейса чата с AI-ассистентом*
 
 ## 🌟 Основные возможности
