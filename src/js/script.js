@@ -1,5 +1,6 @@
 const API_KEY = 'io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6IjBmYjkxMjcwLTUyYzQtNDE2MC04MGQ0LWE1MzhiMDg3ZTRlMiIsImV4cCI6NDg5OTQyOTg2N30.YWAktTw6JftNrLbV32jiBWdUvlASrJdcY6SPnSqPqPHcNjT3wF93ETY_uMiTq1UvR2JQgquJFlrfdOlR2fkaeQ';
 const API_URL = 'https://api.intelligence.io.solutions/api/v1/chat/completions';
+const CHAT_STORAGE_KEY = 'chatHistory';
 
 // Автоматическое определение языка
 const languagePatterns = {
@@ -143,6 +144,10 @@ function addMessage(sender, content) {
     chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
     Prism.highlightAllUnder(msgDiv);
+    
+    // Сохраняем чат после добавления сообщения
+    saveChat();
+    
     return msgDiv;
 }
 
@@ -159,7 +164,20 @@ inputEl.addEventListener('keydown', e => {
 Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
 Prism.highlightAll();
 
-function clearChat() {
+function clearAll() {
+    const notification = document.getElementById('checkmark-notification');
+    
+    // Показываем уведомление
+    notification.classList.remove('hidden');
+    notification.classList.add('show');
+    
+    // Скрываем уведомление через 2 секунды
+    setTimeout(() => {
+        notification.classList.remove('show');
+        notification.classList.add('hidden');
+    }, 2000);
+    
+    // Очищаем текущий чат
     const chatBox = document.getElementById('chat-box');
     const messages = chatBox.querySelectorAll('.message');
     
@@ -172,6 +190,49 @@ function clearChat() {
     // Устанавливаем флаг очистки
     isChatCleared = true;
     
+    // Удаляем историю из localStorage
+    localStorage.removeItem(CHAT_STORAGE_KEY);
+    
     // Прокрутка вниз
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+// Функция сохранения чата
+function saveChat() {
+    const chatBox = document.getElementById('chat-box');
+    localStorage.setItem(CHAT_STORAGE_KEY, chatBox.innerHTML);
+}
+
+// Функция загрузки чата
+function loadChat() {
+    const chatBox = document.getElementById('chat-box');
+    const savedChat = localStorage.getItem(CHAT_STORAGE_KEY);
+    
+    if (savedChat) {
+        // Создаем временный контейнер для анализа содержимого
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = savedChat;
+        
+        // Получаем все сообщения, кроме приветственного
+        const messages = tempDiv.querySelectorAll('.message:not(:first-child)');
+        
+        // Если есть другие сообщения, загружаем историю
+        if (messages.length > 0) {
+            chatBox.innerHTML = savedChat;
+            Prism.highlightAll();
+            
+            // Проверяем последнее сообщение
+            const lastMessage = chatBox.lastElementChild;
+            const isLastMessageRestored = lastMessage && 
+                lastMessage.textContent.includes('История чата восстановлена');
+            
+            // Добавляем уведомление только если последнее сообщение не было о восстановлении
+            if (!isLastMessageRestored) {
+                addMessage('bot', '<div class="thinking-message">История чата восстановлена</div>');
+            }
+        }
+    }
+}
+
+// Загружаем чат при загрузке страницы
+window.addEventListener('load', loadChat);
