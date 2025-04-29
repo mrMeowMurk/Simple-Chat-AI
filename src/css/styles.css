@@ -200,6 +200,17 @@ button:hover {
     transform: translateY(-1px);
 }
 
+button:disabled {
+    background: #3a4252;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+button:disabled:hover {
+    transform: none;
+    background: #3a4252;
+}
+
 .feature-block {
     margin: 15px 0;
     border-left: 3px solid #4a9cff;

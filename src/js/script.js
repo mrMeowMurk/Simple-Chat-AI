@@ -29,6 +29,12 @@ function detectLanguage(code) {
 let isChatCleared = false;
 
 async function sendMessage() {
+    // Проверяем количество символов
+    if (userInput.value.length > MAX_CHARS) {
+        addMessage('bot', '<div class="thinking-message">🚨 Превышен лимит символов! Максимум 1000 символов.</div>');
+        return;
+    }
+
     // Сбрасываем флаг очистки при новом запросе
     isChatCleared = false;
 
@@ -41,6 +47,7 @@ async function sendMessage() {
     input.style.height = 'auto';
     addMessage('user', message);
     input.value = '';
+    updateCharCounter(); // Обновляем счетчик после очистки поля
 
     try {
         const loadingMsg = addMessage('bot', '<div class="thinking-message">Анализирую запрос...</div>');
@@ -265,16 +272,20 @@ const userInput = document.getElementById('user-input');
 function updateCharCounter() {
     const length = userInput.value.length;
     charCounter.textContent = `${length}/${MAX_CHARS}`;
+    const sendButton = document.querySelector('.input-container button');
     
-    // Изменяем цвет в зависимости от количества символов
+    // Изменяем цвет и состояние кнопки в зависимости от количества символов
     if (length > MAX_CHARS) {
         charCounter.classList.add('error');
         charCounter.classList.remove('warning');
+        sendButton.disabled = true;
     } else if (length > MAX_CHARS * 0.8) {
         charCounter.classList.add('warning');
         charCounter.classList.remove('error');
+        sendButton.disabled = false;
     } else {
         charCounter.classList.remove('warning', 'error');
+        sendButton.disabled = false;
     }
 }
 
