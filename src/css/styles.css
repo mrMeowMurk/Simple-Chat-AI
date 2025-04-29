@@ -325,3 +325,29 @@ h1 {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.chat-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.clear-chat-btn {
+    background: #ff4d4d;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.clear-chat-btn:hover {
+    background: #e60000;
+    transform: translateY(-1px);
+}
+
+.clear-chat-btn svg {
+    width: 18px;
+    height: 18px;
+}

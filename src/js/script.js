@@ -24,7 +24,13 @@ function detectLanguage(code) {
     return 'none';
 }
 
+// Добавим глобальную переменную для отслеживания состояния очистки
+let isChatCleared = false;
+
 async function sendMessage() {
+    // Сбрасываем флаг очистки при новом запросе
+    isChatCleared = false;
+
     const input = document.getElementById('user-input');
     const modelSelect = document.getElementById('model-select');
 
@@ -77,10 +83,13 @@ async function sendMessage() {
         console.log('Полученный ответ:', JSON.stringify(data, null, 2));
 
         if (data.choices?.[0]?.message?.content) {
-            const formattedResponse = formatResponse(data.choices[0].message.content);
-            addMessage('bot', formattedResponse);
-        } else {
-            addMessage('bot', '<div class="thinking-message">⚠️ Ошибка получения ответа</div>');
+            // Проверяем, не была ли очищена история
+            if (!isChatCleared) {
+                const formattedResponse = formatResponse(data.choices[0].message.content);
+                addMessage('bot', formattedResponse);
+            }
+        } else if (isChatCleared) {
+            addMessage('bot', '<div class="thinking-message">❌ Запрос отменен (чат был очищен)</div>');
         }
     } catch (error) {
         console.error('Ошибка:', error);
@@ -149,3 +158,20 @@ inputEl.addEventListener('keydown', e => {
 // Инициализация Prism
 Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
 Prism.highlightAll();
+
+function clearChat() {
+    const chatBox = document.getElementById('chat-box');
+    const messages = chatBox.querySelectorAll('.message');
+    
+    messages.forEach(message => {
+        if (!message.textContent.includes('Привет! 👋')) {
+            message.remove();
+        }
+    });
+    
+    // Устанавливаем флаг очистки
+    isChatCleared = true;
+    
+    // Прокрутка вниз
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
