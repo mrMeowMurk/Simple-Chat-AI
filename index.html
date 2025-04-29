@@ -36,6 +36,15 @@
                 Чем могу помочь сегодня? Задавай вопросы по программированию!
                 <div class="timestamp">Только что</div>
             </div>
+            <!-- Блок с примерами запросов -->
+            <div class="examples-container hidden" id="examples-container">
+                <div class="examples-title">Примеры запросов:</div>
+                <div class="examples-list">
+                    <button class="example-btn" onclick="insertExample('Напиши функцию на Python для сортировки списка')">Сортировка списка (Python)</button>
+                    <button class="example-btn" onclick="insertExample('Как сделать асинхронный запрос в JavaScript?')">Асинхронный запрос (JS)</button>
+                    <button class="example-btn" onclick="insertExample('Объясни принцип работы REST API')">REST API объяснение</button>
+                </div>
+            </div>
         </div>
         <div class="input-container">
             <select class="model-selector" id="model-select">

@@ -236,3 +236,24 @@ function loadChat() {
 
 // Загружаем чат при загрузке страницы
 window.addEventListener('load', loadChat);
+
+const examplesContainer = document.getElementById('examples-container');
+
+function checkExamplesVisibility() {
+    const chatBox = document.getElementById('chat-box');
+    const messages = chatBox.querySelectorAll('.message');
+    
+    // Показываем примеры, если только приветственное сообщение
+    examplesContainer.classList.toggle('hidden', messages.length > 1);
+}
+
+function insertExample(text) {
+    const input = document.getElementById('user-input');
+    input.value = text;
+    input.focus();
+    checkExamplesVisibility();
+}
+
+// Проверяем видимость примеров при загрузке и после каждого сообщения
+window.addEventListener('load', checkExamplesVisibility);
+document.getElementById('chat-box').addEventListener('DOMNodeInserted', checkExamplesVisibility);

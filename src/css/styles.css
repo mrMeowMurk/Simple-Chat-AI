@@ -381,3 +381,40 @@ h1 {
     width: 16px;
     height: 16px;
 }
+
+/* Блок с примерами запросов */
+.examples-container {
+    background: rgba(42, 47, 61, 0.5);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 10px;
+    animation: fadeIn 0.5s ease;
+}
+
+.examples-title {
+    color: #7f8fa4;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.examples-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.example-btn {
+    background: rgba(74, 156, 255, 0.1);
+    border: 1px solid rgba(74, 156, 255, 0.2);
+    border-radius: 20px;
+    padding: 8px 16px;
+    color: var(--text);
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.example-btn:hover {
+    background: rgba(74, 156, 255, 0.2);
+    transform: translateY(-1px);
+}
