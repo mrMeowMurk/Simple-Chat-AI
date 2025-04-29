@@ -1,4 +1,4 @@
-const API_KEY = '';
+const API_KEY = 'io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6IjBmYjkxMjcwLTUyYzQtNDE2MC04MGQ0LWE1MzhiMDg3ZTRlMiIsImV4cCI6NDg5OTQyOTg2N30.YWAktTw6JftNrLbV32jiBWdUvlASrJdcY6SPnSqPqPHcNjT3wF93ETY_uMiTq1UvR2JQgquJFlrfdOlR2fkaeQ';
 const API_URL = 'https://api.intelligence.io.solutions/api/v1/chat/completions';
 
 // Автоматическое определение языка
@@ -27,6 +27,7 @@ function detectLanguage(code) {
 async function sendMessage() {
     const input = document.getElementById('user-input');
     const modelSelect = document.getElementById('model-select');
+
     const message = input.value.trim();
     if (!message) return;
 
@@ -37,26 +38,43 @@ async function sendMessage() {
     try {
         const loadingMsg = addMessage('bot', '<div class="thinking-message">Анализирую запрос...</div>');
 
+        const requestBody = {
+            model: modelSelect.value,
+            messages: [
+                {
+                    role: "system",
+                    content: `Ты senior-разработчик. Всегда отвечай на русском и строго в формате Markdown: с заголовками, списками, таблицами, вставками кода и т.д.`
+                },
+                {
+                    role: "user",
+                    content: message
+                }
+            ],
+            temperature: 0.7,
+            max_tokens: 1500,
+            stream: false
+        };
+
+        console.log('Отправляемый запрос:', JSON.stringify(requestBody, null, 2));
+
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${API_KEY}`
             },
-            body: JSON.stringify({
-                model: modelSelect.value,
-                messages: [
-                    { role: "system", content: `Ты senior-разработчик. Всегда отвечай на русском и строго в формате Markdown: с заголовками, списками, таблицами, вставками кода и т.д.` },
-                    { role: "user", content: `Как senior разработчик, ответь: ${message}` }
-                ],
-                temperature: 0.7,
-                max_tokens: 1500,
-                stream: false
-            })
+            body: JSON.stringify(requestBody)
         });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Ошибка сервера: ${response.status} - ${JSON.stringify(errorData)}`);
+        }
 
         const data = await response.json();
         loadingMsg.remove();
+
+        console.log('Полученный ответ:', JSON.stringify(data, null, 2));
 
         if (data.choices?.[0]?.message?.content) {
             const formattedResponse = formatResponse(data.choices[0].message.content);
@@ -65,8 +83,8 @@ async function sendMessage() {
             addMessage('bot', '<div class="thinking-message">⚠️ Ошибка получения ответа</div>');
         }
     } catch (error) {
-        console.error('Error:', error);
-        addMessage('bot', '<div class="thinking-message">🚨 Ошибка соединения</div>');
+        console.error('Ошибка:', error);
+        addMessage('bot', `<div class="thinking-message">🚨 Ошибка: ${error.message}</div>`);
     }
 }
 

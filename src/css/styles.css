@@ -36,6 +36,8 @@ body {
     gap: 15px;
     overflow-y: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: visible;
 }
 
 .message {
@@ -268,4 +270,39 @@ button:hover {
     background: var(--secondary);
     color: var(--text);
     padding: 10px;
+}
+
+.scroll-down-btn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 40px;
+    height: 40px;
+    background: red;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.scroll-down-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-down-btn svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+    display: block;
+}
+
+.scroll-down-btn.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
