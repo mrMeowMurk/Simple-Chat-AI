@@ -469,3 +469,8 @@ h1 {
 .char-counter.error {
     color: #ff4d4d;
 }
+
+.image-container {
+    margin: 20px 0;
+    padding: 10px;
+}
