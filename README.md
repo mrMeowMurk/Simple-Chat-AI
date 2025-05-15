@@ -83,4 +83,7 @@ AI-Chat/
 
 ---
 
-Создано с ❤️ и ☕ [MeowMurk](https://github.com/MeowMurk)
+<div align="center">
+  <sub>Сделано с ❤️ by MeowMurk</sub>
+</div> 
+
